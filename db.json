@@ -1,0 +1,20 @@
+{
+    "users": [
+        {
+            "email": "loggedineamil@gmail.com",
+            "attribute": [
+                "isDoctor",
+                "isOncologyDepartment"
+            ],
+            "uid": "asasasasasas"
+        },
+        {
+            "email": "loggedineamil2@gmail.com",
+            "attribute": [
+                "isMedicalStaff",
+                "isOBGYN"
+            ],
+            "uid": "asasasa23232"
+        }
+    ]
+}
