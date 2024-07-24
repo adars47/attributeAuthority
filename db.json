@@ -15,6 +15,14 @@
                 "isOBGYN"
             ],
             "uid": "asasasa23232"
+        },
+        {
+            "email": "adars.nepal@gmail.com",
+            "attribute": [
+                "isMedicalStaff",
+                "isOBGYN"
+            ],
+            "uid": "asasasa23232"
         }
     ]
 }
