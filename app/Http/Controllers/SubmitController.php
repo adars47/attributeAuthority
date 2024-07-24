@@ -56,19 +56,55 @@ class SubmitController
      *  }
      */
 
+    public function login(Request $request)
+    {
+        $email = $request->input('email');
+        $response = new Response();
+        $file = file_get_contents(base_path() . "/db.json");
+        $file = json_decode($file, true);
+        if ($file === null) {
+            $response->setStatusCode(400);
+            $response->setContent("user not found");
+        }
+
+        foreach ($file['users'] as $value) {
+            if ($value['email'] === $email) {
+                $key = $this->generateKeys($value['uid'],$value['attribute']);
+                $content = json_encode($key);
+                return response()->streamDownload(function () use ($content){
+                    echo $content;
+                },$_SERVER['HTTP_HOST']."key");
+            }
+        }
+        $response->setStatusCode(400);
+        $response->setContent("Invalid credentials");
+        return $response;
+    }
+
     /**
      * @param Request $request
      * @return Response|\Symfony\Component\HttpFoundation\StreamedResponse
      */
     public function sign(Request $request)
     {
+        $fileName=time().".key";
+        $key = $this->generateKeys("aasasasasasasas",[
+            'isDoctor',
+            'isOncologist'
+        ]);
+        $content = json_encode($key);
+        return response()->streamDownload(function () use ($content){
+            echo $content;
+        },$fileName);
+    }
+
+
+    private function generateKeys($user_id,$attributes)
+    {
         $message = [
-            "attributes" => [
-                "IsDoctor",
-                "IsMedicalStaff"
-            ],
-            "issuedTo" => "0x7D378c0c7D5E046Fc1e9b95d5d4411FC4E6424f4",
-            "validUntil"=> "2024-10-18" //system wide variable
+            "attributes" => $attributes,
+            "issuedTo" => $user_id,
+            "validUntil"=> "2024-01-11" //system wide variable
         ];
         $stringMessage = json_encode($message);
         $signature = "";
@@ -80,17 +116,10 @@ class SubmitController
             $response->setStatusCode(500);
             return $response;
         }
-        $key = [
+        return [
             "payload" => $stringMessage,
             "signature" => base64_encode($signature)
         ];
-
-        $fileName=time().".key";
-        $content = json_encode($key);
-
-        return response()->streamDownload(function () use ($content){
-            echo $content;
-        },$fileName);
     }
 
 }

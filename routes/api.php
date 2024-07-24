@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/publicKey', 'App\Http\Controllers\SubmitController@publicKey');
-Route::get('/validate', 'App\Http\Controllers\SubmitController@sign');
+Route::post('/login','App\Http\Controllers\SubmitController@login');
